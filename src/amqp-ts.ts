@@ -881,7 +881,7 @@ export class Queue {
         // check if there is a reply-to
         if (msg.properties.replyTo) {
           var options: any = {};
-          if (result instanceof Promise) {
+          if (result.then && typeof result.then === 'function') {
             result.then((resultValue) => {
               resultValue = Queue._packMessageContent(result, options);
               this._channel.sendToQueue(msg.properties.replyTo, resultValue, options);

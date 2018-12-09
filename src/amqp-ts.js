@@ -1,3 +1,4 @@
+"use strict";
 /**
  * AmqpSimple.ts - provides a simple interface to read from and write to RabbitMQ amqp exchanges
  * Created by Ab on 17-9-2015.
@@ -5,7 +6,7 @@
  * methods and properties starting with '_' signify that the scope of the item should be limited to
  * the inside of the enclosing namespace.
  */
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // simplified use of amqp exchanges and queues, wrapper for amqplib
 var AmqpLib = require("amqplib/callback_api");
 var Promise = require("bluebird");
@@ -28,7 +29,7 @@ var DIRECT_REPLY_TO_QUEUE = "amq.rabbitmq.reply-to";
 //----------------------------------------------------------------------------------------------------
 // Connection class
 //----------------------------------------------------------------------------------------------------
-var Connection = (function () {
+var Connection = /** @class */ (function () {
     function Connection(url, socketOptions, reconnectStrategy) {
         if (url === void 0) { url = "amqp://localhost"; }
         if (socketOptions === void 0) { socketOptions = {}; }
@@ -45,7 +46,7 @@ var Connection = (function () {
     }
     Connection.prototype.rebuildConnection = function () {
         var _this = this;
-        if (this._rebuilding) {
+        if (this._rebuilding) { // only one rebuild process can be active at any time
             exports.log.log("debug", "Connection rebuild already in progress, joining active rebuild attempt.", { module: "amqp-ts" });
             return this.initialized;
         }
@@ -95,7 +96,7 @@ var Connection = (function () {
                     exports.log.log("warn", "Connection retry " + (retry + 1) + " in " + thisConnection.reconnectStrategy.interval + "ms", { module: "amqp-ts" });
                     setTimeout(thisConnection.tryToConnect, thisConnection.reconnectStrategy.interval, thisConnection, retry + 1, callback);
                 }
-                else {
+                else { //no reconnect strategy, or retries exhausted, so return the error
                     exports.log.log("warn", "Connection failed, exiting: No connection retries left (retry " + retry + ").", { module: "amqp-ts" });
                     callback(err);
                 }
@@ -262,14 +263,14 @@ var Connection = (function () {
     return Connection;
 }());
 exports.Connection = Connection;
-var Connection;
 (function (Connection) {
     "use strict";
 })(Connection = exports.Connection || (exports.Connection = {}));
+exports.Connection = Connection;
 //----------------------------------------------------------------------------------------------------
 // Message class
 //----------------------------------------------------------------------------------------------------
-var Message = (function () {
+var Message = /** @class */ (function () {
     function Message(content, options) {
         if (options === void 0) { options = {}; }
         this.properties = options;
@@ -358,7 +359,7 @@ exports.Message = Message;
 //----------------------------------------------------------------------------------------------------
 // Exchange class
 //----------------------------------------------------------------------------------------------------
-var Exchange = (function () {
+var Exchange = /** @class */ (function () {
     function Exchange(connection, name, type, options) {
         if (options === void 0) { options = {}; }
         this._connection = connection;
@@ -608,14 +609,14 @@ var Exchange = (function () {
     return Exchange;
 }());
 exports.Exchange = Exchange;
-var Exchange;
 (function (Exchange) {
     "use strict";
 })(Exchange = exports.Exchange || (exports.Exchange = {}));
+exports.Exchange = Exchange;
 //----------------------------------------------------------------------------------------------------
 // Queue class
 //----------------------------------------------------------------------------------------------------
-var Queue = (function () {
+var Queue = /** @class */ (function () {
     function Queue(connection, name, options) {
         if (options === void 0) { options = {}; }
         this._connection = connection;
@@ -1002,14 +1003,14 @@ var Queue = (function () {
     return Queue;
 }());
 exports.Queue = Queue;
-var Queue;
 (function (Queue) {
     "use strict";
 })(Queue = exports.Queue || (exports.Queue = {}));
+exports.Queue = Queue;
 //----------------------------------------------------------------------------------------------------
 // Binding class
 //----------------------------------------------------------------------------------------------------
-var Binding = (function () {
+var Binding = /** @class */ (function () {
     function Binding(destination, source, pattern, args) {
         if (pattern === void 0) { pattern = ""; }
         if (args === void 0) { args = {}; }
@@ -1113,5 +1114,3 @@ var Binding = (function () {
     return Binding;
 }());
 exports.Binding = Binding;
-
-//# sourceMappingURL=amqp-ts.js.map
