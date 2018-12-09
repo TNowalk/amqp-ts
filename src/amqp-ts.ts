@@ -921,7 +921,7 @@ export class Queue {
         var result = this._consumer(message);
         // check if there is a reply-to
         if (msg.properties.replyTo) {
-          if (result instanceof Promise) {
+          if (result.then && typeof result.then === 'function') {
             result.then((resultValue) => {
               if (!(resultValue instanceof Message)) {
                 resultValue = new Message(resultValue, {});
